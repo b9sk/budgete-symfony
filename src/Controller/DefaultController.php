@@ -20,7 +20,7 @@ class DefaultController extends AbstractController
         // if user is logged in then redirect to dashboard
         //   - else return render of static index.html
         if ( $this->getUser() && array_search("ROLE_USER", $this->getUser()->getRoles()) !== false ) {
-            return new RedirectResponse($urlGenerator->generate('dashboard'));
+            return new RedirectResponse($urlGenerator->generate('dashboard_user'));
         }
         else {
             return $this->render('default/index.html.twig');
