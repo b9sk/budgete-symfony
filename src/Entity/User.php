@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -39,6 +41,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Budget", mappedBy="user", orphanRemoval=true)
+     */
+    private $budgets;
+
+    public function __construct()
+    {
+        $this->budgets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -129,6 +141,37 @@ class User implements UserInterface
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Budget[]
+     */
+    public function getBudgets(): Collection
+    {
+        return $this->budgets;
+    }
+
+    public function addBudget(Budget $budget): self
+    {
+        if (!$this->budgets->contains($budget)) {
+            $this->budgets[] = $budget;
+            $budget->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBudget(Budget $budget): self
+    {
+        if ($this->budgets->contains($budget)) {
+            $this->budgets->removeElement($budget);
+            // set the owning side to null (unless already changed)
+            if ($budget->getUser() === $this) {
+                $budget->setUser(null);
+            }
+        }
 
         return $this;
     }
