@@ -1,0 +1,21 @@
+{% for item in recent %}
+    {% if item.type == 'expense' %}
+        {% set badge_color = 'danger' %}
+    {% elseif item.type == 'income' %}
+        {% set badge_color = 'success' %}
+    {% endif %}
+
+    <article class="card mb-3">
+        <div class="card-body">
+            <div class="text-muted">{{ item.created.format('d.m.Y') }}</div>
+            <div class="mb-1"><span class="badge badge-{{ badge_color }}">{{ item.type }}</span> {{ item.amount|number_format(0,'.',' ') }}</div>
+            <div class="small mb-3">{{ item.description }}</div>
+            <div class="btn-group">
+                {# todo: add and implement proper routes #}
+                <a class="btn btn-outline-primary btn-sm" href="/edit">Edit</a>
+                <a class="btn btn-outline-danger btn-sm" href="/remove">Remove</a>
+            </div>
+        </div>
+
+    </article>
+{% endfor %}

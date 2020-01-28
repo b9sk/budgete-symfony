@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Budget;
+
 
 class DashboardController extends AbstractController
 {
@@ -14,21 +16,17 @@ class DashboardController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
         $user = $this->getUser();
-        
-        // redirect a user if he comes to /dashboard
-        return $this->redirect($this->generateUrl('dashboard_user', ['user_id' => $user->getId()]));
-    }
     
-    /**
-     * @Route("/dashboard/{user_id}", name="dashboard_user")
-     */
-    public function userDashboard($user_id)
-    {
-        $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
+        // fetch recent budget data of the user
+        $budget_repository = $this->getDoctrine()->getRepository(Budget::class);
+        $budget_result = $budget_repository->findBy(['user' => $user->getId()], ['created' => 'DESC'], 10);
+    
+    
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
             'user' => $user,
+            'recent' => $budget_result
         ]);
     }
+    
 }
