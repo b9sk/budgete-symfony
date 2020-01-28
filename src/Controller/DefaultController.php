@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class DefaultController extends AbstractController
 {
-    function index(UrlGeneratorInterface $urlGenerator)
+    function index()
     {
         // if user is logged in then redirect to dashboard
         //   - else return render of static index.html
         if ( $this->getUser() && array_search("ROLE_USER", $this->getUser()->getRoles()) !== false ) {
-            return new RedirectResponse($urlGenerator->generate('dashboard'));
+            return $this->redirect($this->generateUrl('dashboard'));
         }
         else {
             return $this->render('default/index.html.twig');
