@@ -1,9 +1,13 @@
 {% block navbar %}
 <nav class="navbar mb-3 navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{{ path('index') }}">Budgete</a>
     {% if user %}
-        {{ user.name ?: user.email }}
-    {% else %}
-        <a class="navbar-brand" href="{{ path('index') }}">Budgete</a>
+        <div class="dropdown">
+            <a class="dropdown-toggle" id="navUserDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{{ path('dashboard') }}">{{ user.name ?: user.email }}</a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="/logout">Logout</a>
+            </div>
+        </div>
     {% endif %}
 </nav>
 {% endblock %}
