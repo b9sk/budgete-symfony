@@ -1,3 +1,8 @@
+{% if user is defined %}
+    {% set user = user %}
+{% else %}
+    {% set user = null %}
+{% endif %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,7 +13,10 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {{ include('_navbar.html.twig', {user: user}) }}
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}
             <script src="/assets/js/jquery-3.3.1.slim.min.js"></script>
             <script src="/assets/js/popper.min.js"></script>
