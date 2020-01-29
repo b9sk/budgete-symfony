@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Budget;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,8 +17,7 @@ class BudgetFormType extends AbstractType
             ->add('amount', IntegerType::class)
             ->add('type')
             ->add('description')
-            ->add('created')
-            ->add('user')
+            ->add('submit', SubmitType::class)
         ;
     }
 
