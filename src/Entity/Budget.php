@@ -17,7 +17,7 @@ class Budget
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="budgets")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -38,7 +38,7 @@ class Budget
     private $description;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime")
      */
     private $created;
 
@@ -95,12 +95,12 @@ class Budget
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeImmutable
+    public function getCreated(): ?\DateTime
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTimeImmutable $created): self
+    public function setCreated(\DateTime $created): self
     {
         $this->created = $created;
 
