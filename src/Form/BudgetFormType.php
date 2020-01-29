@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Budget;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +16,12 @@ class BudgetFormType extends AbstractType
     {
         $builder
             ->add('amount', IntegerType::class)
-            ->add('type')
+            ->add('type', ChoiceType::class, [
+                'choices' => [
+                    'Income' => 'income',
+                    'Expense' => 'expense'
+                ]
+            ])
             ->add('description')
             ->add('submit', SubmitType::class)
         ;
