@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Budget;
+use App\Entity\User;
+use App\Form\BudgetFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -25,8 +28,16 @@ class BudgetController extends AbstractController
      */
     public function add()
     {
-        return $this->render('budget/index.html.twig', [
-            'controller_name' => 'BudgetController',
+        $budget = new Budget();
+        $user = new User();
+        
+        $budget->setUser($user);
+        $budget->setCreated(new \DateTimeImmutable('now'));
+        
+        $form = $this->createForm(BudgetFormType::class, $budget);
+        
+        return $this->render('budget/add.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

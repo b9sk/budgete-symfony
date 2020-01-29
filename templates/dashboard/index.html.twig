@@ -14,7 +14,7 @@
         {{ include('budget/_budget.html.twig', {recent: recent}) }}
         <a class="btn btn-primary btn-block" href="{{ path('budget') }}">More items</a>
     {% else %}
-        <div class="mb-3">You have no records yet.</div> <div><a href="" class="btn btn-success">Create a record</a></div>
+        <div class="mb-3">You have no records yet.</div> <div><a href="{{ path('budget_add') }}" class="btn btn-success">Create a record</a></div>
     {% endif %}
 </section>
 
