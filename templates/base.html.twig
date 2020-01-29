@@ -16,6 +16,7 @@
     <body>
         {{ include('_navbar.html.twig', {user: user}) }}
         <div class="container">
+            {{ include('_flash_messages.html.twig') }}
             {% block body %}{% endblock %}
         </div>
         {% block javascripts %}
