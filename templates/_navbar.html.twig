@@ -5,7 +5,7 @@
         <div class="dropdown">
             <a class="dropdown-toggle" id="navUserDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{{ path('dashboard') }}">{{ user.name ?: user.email }}</a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="/logout">Logout</a>
+                <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
             </div>
         </div>
     {% endif %}
