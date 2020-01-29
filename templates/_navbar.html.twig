@@ -1,13 +1,24 @@
 {% block navbar %}
-<nav class="navbar mb-3 navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="{{ path('index') }}">Budgete</a>
-    {% if user %}
-        <div class="dropdown">
-            <a class="dropdown-toggle" id="navUserDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{{ path('dashboard') }}">{{ user.name ?: user.email }}</a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
+    <nav class="navbar mb-3 navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+        <a class="navbar-brand mr-auto" href="{{ path('index') }}">Budgete</a>
+
+        {# a user control panel #}
+        {% if user %}
+            <div class="dropdown mr-3">
+                <a href="#" class="dropdown-toggle" class="dropdown-toggle" id="navUserDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    <span class="d-none d-md-inline">{{ user.name ?: user.email }}</span>
+                    <span class="caret"></span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navUserDropdown">
+                    <div class="dropdown-item d-xs-block d-md-none disabled">{{ user.name ?: user.email }}</div>
+                    <a class="dropdown-item disabled" href="#">(TBD: Profile)</a>
+                    <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
+                </div>
             </div>
+            <a class="btn btn-primary" href="{{ path('budget_add') }}">Add <span class="d-none d-md-inline">income/expense</span></a>
+        {% endif %}
         </div>
-    {% endif %}
-</nav>
+    </nav>
 {% endblock %}
