@@ -18,9 +18,11 @@ class BudgetFormType extends AbstractType
             ->add('amount', IntegerType::class)
             ->add('type', ChoiceType::class, [
                 'choices' => [
+                    'Expense' => 'expense',
                     'Income' => 'income',
-                    'Expense' => 'expense'
-                ]
+                ],
+                'expanded' => true,
+                'multiple' => false,
             ])
             ->add('description')
             ->add('submit', SubmitType::class)
