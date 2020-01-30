@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ user.name ?: user.email }}{% endblock %}
+{% block title %}Budgete of {{ user.name ?: user.email }}{% endblock %}
 
 {% block body %}
 
@@ -17,7 +17,7 @@
             <a class="btn btn-primary btn-block" href="{{ path('budget') }}">More items</a>
         {% else %}
             <div class="mb-3">You have no records yet.</div>
-            <div><a href="{{ path('budget_add') }}" class="btn btn-success">Create a record</a></div>
+            <div><a href="{{ path('add_budget') }}" class="btn btn-success">Create a record</a></div>
         {% endif %}
     </section>
 

@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Budget;
 use App\Form\BudgetFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -27,7 +29,7 @@ class BudgetController extends AbstractController
     }
     
     /**
-     * @Route("/dashboard/budget/add", name="budget_add")
+     * @Route("/dashboard/budget/add", name="add_budget")
      */
     public function add(Request $request)
     {
@@ -38,6 +40,8 @@ class BudgetController extends AbstractController
         $budget->setUser($this->getUser());
         $budget->setCreated(new \DateTime('now'));
         $form = $this->createForm(BudgetFormType::class, $budget);
+        // @todo: reuse BudgetFormType form in /edit/# route using the instruction:
+        // $form = $form->add('created', DateTimeType::class)->remove('submit')->add('submit', SubmitType::class);
     
         // performs when the form submitted
         $form->handleRequest($request);
@@ -55,13 +59,24 @@ class BudgetController extends AbstractController
                 'success',
                 'The record was saved.'
             );
+            
+            return $this->redirect($this->generateUrl('dashboard'));
         
         }
         
         
-        return $this->render('budget/add.html.twig', [
+        return $this->render('budget/form.html.twig', [
             'form' => $form->createView(),
             'user' => $this->getUser(),
+            'title' => 'Add expense or income',
         ]);
+    }
+    
+    /**
+     * @Route("/dashboard/budget/edit/{budget_id}", name="edit_budget")
+     */
+    public function budgetById($budget_id)
+    {
+        $repo = $this->getDoctrine()->getRepository(Budget::class);
     }
 }

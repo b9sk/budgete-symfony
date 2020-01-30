@@ -19,7 +19,7 @@ class DashboardController extends AbstractController
     
         // fetch recent budget data of the user
         $budget_repository = $this->getDoctrine()->getRepository(Budget::class);
-        $budget_result = $budget_repository->findBy(['user' => $user->getId()], ['created' => 'DESC'], 10);
+        $budget_result = $budget_repository->findBy(['user' => $user->getId()], ['created' => 'DESC'], 12);
     
     
         return $this->render('dashboard/index.html.twig', [
