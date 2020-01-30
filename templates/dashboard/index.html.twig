@@ -4,18 +4,21 @@
 
 {% block body %}
 
-{#{% for item in recent %}#}
+    {#{% for item in recent %}#}
     {#<div>{{ dump(item) }}</div>#}
-{#{% endfor %}#}
+    {#{% endfor %}#}
 
-<section class="mb-3">
-    <h2>Recent log</h2>
-    {% if recent %}
-        {{ include('dashboard/_recent.html.twig', {recent: recent}) }}
-        <a class="btn btn-primary btn-block" href="{{ path('budget') }}">More items</a>
-    {% else %}
-        <div class="mb-3">You have no records yet.</div> <div><a href="{{ path('budget_add') }}" class="btn btn-success">Create a record</a></div>
-    {% endif %}
-</section>
+    <section class="mb-3">
+        <h2>Recent log</h2>
+        {% if recent %}
+            <div class="row">
+                {{ include('dashboard/_recent.html.twig', {recent: recent}) }}
+            </div>
+            <a class="btn btn-primary btn-block" href="{{ path('budget') }}">More items</a>
+        {% else %}
+            <div class="mb-3">You have no records yet.</div>
+            <div><a href="{{ path('budget_add') }}" class="btn btn-success">Create a record</a></div>
+        {% endif %}
+    </section>
 
 {% endblock %}
