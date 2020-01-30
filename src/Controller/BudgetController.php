@@ -79,14 +79,12 @@ class BudgetController extends AbstractController
     
         // get a budget record by id
         $item = $this->getDoctrine()->getRepository(Budget::class)->find($id);
-        dump($item);
     
         // reuse BudgetFormType form
         $form = $this->createForm(BudgetFormType::class, $item);
-        $form = $form
-            ->add('created', DateTimePickerType::class)
-            // this moves submit button at the end of edit form
-            ->remove('submit')->add('submit', SubmitType::class);
+        
+        // disabled due an unexpected bug in Chrome built-in datapicker for Android 6
+        // $form = $form->add('created', DateTimePickerType::class)// this moves submit button at the end of edit form ->remove('submit')->add('submit', SubmitType::class);
     
         $form->handleRequest($request);
     
