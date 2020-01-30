@@ -1,6 +1,6 @@
 <section class="mb-3">
-    <h2>Recent log</h2>
     {% if recent %}
+        <h2>Recent log <span class="badge-info badge"><a class="text-white" href="{{ path('budget') }}">More items</a></span> </h2>
         <div class="row">
             {% for item in recent %}
                 {% if item.type == 'expense' %}
@@ -14,7 +14,7 @@
                             <div class="text-muted">{{ item.created.format('d.m H:i') }}</div>
                             <div class="dropdown">
                                 <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="actions-{{ item.getId }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
-                                <div class="dropdown-menu" aria-labelledby="actions-{{ item.getId }}">
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="actions-{{ item.getId }}">
                                     <a class="dropdown-item" href="{{ path('edit_budget', { id: item.getId }) }}">Edit</a>
                                     <a class="dropdown-item" href="{{ path('remove_budget', { id: item.getId }) }}">Delete</a>
                                 </div>
@@ -30,9 +30,7 @@
                 </div>
             {% endfor %}
         </div>
-        {% if recent|length > 12 %}
-            <a class="btn btn-primary btn-block" href="{{ path('budget') }}">More items</a>
-        {% endif %}
+
     {% else %}
         <div class="mb-3">You have no records yet.</div>
         <div><a href="{{ path('add_budget') }}" class="btn btn-success">Create a record</a></div>
