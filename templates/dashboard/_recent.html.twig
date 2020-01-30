@@ -7,7 +7,7 @@
     <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3">
         <article class="card mb-3">
             <header class="card-header d-flex justify-content-between align-items-center">
-                <div class="text-muted">{{ item.created.format('d.m.Y H:i') }}</div>
+                <div class="text-muted">{{ item.created.format('d.m H:i') }}</div>
                 <div class="dropdown">
                     <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="actions-{{ item.getId }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
                     <div class="dropdown-menu" aria-labelledby="actions-{{ item.getId }}">
