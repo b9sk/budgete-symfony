@@ -33,7 +33,7 @@ class BudgetVoter extends Voter
             case self::OWN:
                 // logic to determine if the user can EDIT
                 // return true or false
-                return $user->getId() == $subject->getUser()->getId();
+                return $user->getId() === $subject->getUser()->getId();
                 break;
         }
 
