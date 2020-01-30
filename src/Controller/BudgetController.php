@@ -28,6 +28,16 @@ class BudgetController extends AbstractController
         ]);
     }
     
+    public function recentItems($limit = 12)
+    {
+        $recent_items = $this->getDoctrine()->getRepository(Budget::class)
+            ->findBy(['user' => $this->getUser()->getId()], ['created' => 'DESC'], $limit);
+        
+        return $this->render('budget/_recent.html.twig', [
+            'recent' => $recent_items
+        ]);
+    }
+    
     /**
      * @Route("/dashboard/budget/add", name="add_budget")
      */

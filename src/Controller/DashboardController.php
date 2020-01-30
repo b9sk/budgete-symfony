@@ -12,20 +12,13 @@ class DashboardController extends AbstractController
     /**
      * @Route("/dashboard", name="dashboard")
      */
-    public function index()
+    public function index($limit = 12)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-        $user = $this->getUser();
-    
-        // fetch recent budget data of the user
-        $budget_repository = $this->getDoctrine()->getRepository(Budget::class);
-        $budget_result = $budget_repository->findBy(['user' => $user->getId()], ['created' => 'DESC'], 12);
-    
     
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'DashboardController',
-            'user' => $user,
-            'recent' => $budget_result
+            'user' => $this->getUser(),
         ]);
     }
     
