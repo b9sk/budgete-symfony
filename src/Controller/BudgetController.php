@@ -111,4 +111,24 @@ class BudgetController extends AbstractController
         ]);
     
     }
+    
+    /**
+     * @Route("/dashboard/budget/remove/{id}", name="remove_budget")
+     */
+    public function removeBudgetItem($id)
+    {
+        $budget_item = $this->getDoctrine()->getRepository(Budget::class)->find($id);
+        $this->denyAccessUnlessGranted('own', $budget_item);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($budget_item);
+        $em->flush();
+    
+        $this->addFlash(
+            'success',
+            'The record was removed.'
+        );
+        
+        return $this->redirect($this->generateUrl('dashboard'));
+    }
 }
