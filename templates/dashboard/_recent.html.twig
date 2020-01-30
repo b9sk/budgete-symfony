@@ -12,7 +12,7 @@
                     <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="actions-{{ item.getId }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
                     <div class="dropdown-menu" aria-labelledby="actions-{{ item.getId }}">
                         {# todo: add and implement proper routes #}
-                        <a class="dropdown-item" href="edit/#">Edit</a>
+                        <a class="dropdown-item" href="{{ path('edit_budget', { id: item.getId }) }}">Edit</a>
                         <a class="dropdown-item" href="delete/#">Delete</a>
                     </div>
                 </div>
