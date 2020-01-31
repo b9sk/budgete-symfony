@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Budget;
+use App\Service\DateIntervalResolverService;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -15,19 +16,40 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class BudgetRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    
+    protected $dateResolver;
+    
+    public function __construct(ManagerRegistry $registry, DateIntervalResolverService $dateResolver)
     {
         parent::__construct($registry, Budget::class);
+        $this->dateResolver = $dateResolver;
     }
     
     public function getTodayRecords($userId)
     {
-        $date = new \DateTime('today');
+        $date = new \DateTime('today midnight');
         $today = $date->format('Y-m-d H:i:s');
         
         return $this->createQueryBuilder('b')
             ->andWhere('b.created > :date')
             ->setParameter('date', $today)
+            ->andWhere('b.user = :user')
+            ->setParameter('user', $userId)
+            ->orderBy('b.created', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
+    public function getLastWeekRecords($userId)
+    {
+        // @todo: sum(amount)
+        $interval = $this->dateResolver->getLastWeek();
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.created < :start')
+            ->setParameter('start', $interval['start'])
+            ->andWhere('b.created > :end')
+            ->setParameter('end', $interval['end'])
             ->andWhere('b.user = :user')
             ->setParameter('user', $userId)
             ->orderBy('b.created', 'DESC')

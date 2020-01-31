@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Budget;
 use App\Form\BudgetFormType;
+use App\Service\DateIntervalResolverService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,14 +24,30 @@ class BudgetController extends AbstractController
         ]);
     }
     
-    public function today()
+    public function today(DateIntervalResolverService $datetimeResolver)
     {
         $user = $this->getUser();
-        $today = $this->getDoctrine()->getRepository(Budget::class)->getTodayRecords($user->getId());
+        $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
+        $today = $budgetRepo->getTodayRecords($user->getId());
         
         return $this->render('budget/_day.html.twig', [
             'recent' => $today,
             'title' => 'Today',
+            'user' => $user,
+        ]);
+    }
+    
+    public function lastWeek()
+    {
+        $user = $this->getUser();
+        $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
+        $lastWeek = $budgetRepo->getLastWeekRecords($user->getId());
+        
+        dump($lastWeek);
+        // @todo: week template
+        return $this->render('budget/_day.html.twig', [
+            'recent' => $lastWeek,
+            'title' => 'Last week',
             'user' => $user,
         ]);
     }
