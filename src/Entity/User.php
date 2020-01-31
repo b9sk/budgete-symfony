@@ -41,6 +41,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Currency", cascade={"persist", "remove"})
+     */
+    private $currency;
     
     public function __construct()
     {
@@ -143,6 +148,18 @@ class User implements UserInterface
     public function __toString()
     {
         return (string)$this->getId();
+    }
+
+    public function getCurrency(): ?Currency
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?Currency $currency): self
+    {
+        $this->currency = $currency;
+
+        return $this;
     }
     
 }
