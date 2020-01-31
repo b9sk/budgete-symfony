@@ -45,8 +45,8 @@ class BudgetController extends AbstractController
         
         dump($lastWeek);
         // @todo: week template
-        return $this->render('budget/_day.html.twig', [
-            'recent' => $lastWeek,
+        return $this->render('budget/_week.html.twig', [
+            'records' => $lastWeek,
             'title' => 'Last week',
             'user' => $user,
         ]);

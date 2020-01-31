@@ -43,16 +43,24 @@ class BudgetRepository extends ServiceEntityRepository
     
     public function getLastWeekRecords($userId)
     {
-        // @todo: sum(amount)
+        // sum(amount), date(created)
         $interval = $this->dateResolver->getLastWeek();
+        
+        // aggregation example
+        //SELECT sum(amount) as sum, DATE(created) as day
+        //FROM `budget`
+        //WHERE created > '2020-01-27 00:00:00' AND created < '2020-01-31 00:00:00'
+        //GROUP BY day
         return $this->createQueryBuilder('b')
+            ->select('SUM(b.amount) as sum', 'DATE(b.created) as date', 'b.type')
             ->andWhere('b.created < :start')
             ->setParameter('start', $interval['start'])
             ->andWhere('b.created > :end')
             ->setParameter('end', $interval['end'])
             ->andWhere('b.user = :user')
             ->setParameter('user', $userId)
-            ->orderBy('b.created', 'DESC')
+            ->groupBy('date', 'b.type')
+            ->orderBy('date', 'ASC')
             ->getQuery()
             ->getResult()
         ;
