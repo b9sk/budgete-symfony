@@ -43,10 +43,10 @@ class User implements UserInterface
     private $name;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Currency", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Currency")
      */
     private $currency;
-    
+
     public function __construct()
     {
         $this->budgets = new ArrayCollection();
@@ -161,5 +161,4 @@ class User implements UserInterface
 
         return $this;
     }
-    
 }
