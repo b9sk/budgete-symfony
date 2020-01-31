@@ -4,15 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Budget;
 use App\Form\BudgetFormType;
-use App\Form\Type\DateTimePickerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-// @todo: implement the routes
-//   - /page/# - paginator
-//   - /add - create a budget record that belongs to its user
 class BudgetController extends AbstractController
 {
     /**
