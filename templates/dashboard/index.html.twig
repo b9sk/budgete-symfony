@@ -4,6 +4,6 @@
 
 {% block body %}
 
-    {{ render(controller('App\\Controller\\BudgetController::recentItems', { limit: 12 })) }}
+    {{ render(controller('App\\Controller\\BudgetController::today')) }}
 
 {% endblock %}

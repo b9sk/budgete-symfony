@@ -6,6 +6,7 @@ use App\Entity\Budget;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+
 /**
  * @method Budget|null find($id, $lockMode = null, $lockVersion = null)
  * @method Budget|null findOneBy(array $criteria, array $orderBy = null)
@@ -17,6 +18,22 @@ class BudgetRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Budget::class);
+    }
+    
+    public function getTodayRecords($userId)
+    {
+        $date = new \DateTime('today');
+        $today = $date->format('Y-m-d H:i:s');
+        
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.created > :date')
+            ->setParameter('date', $today)
+            ->andWhere('b.user = :user')
+            ->setParameter('user', $userId)
+            ->orderBy('b.created', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**

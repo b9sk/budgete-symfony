@@ -1,6 +1,6 @@
 <section class="mb-3">
     {% if recent %}
-        <h2>Recent log <span class="badge-info badge"><a class="text-white" href="{{ path('budget') }}">More items</a></span> </h2>
+        <h2>{{ title }} <!--<span class="badge-info badge"><a class="text-white" href="{{ path('budget') }}">More items</a></span>--></h2>
         <div class="row">
             {% for item in recent %}
                 {% if item.type == 'expense' %}
@@ -21,7 +21,7 @@
                             </div>
                         </header>
                         <div class="card-body">
-                            <div class="h5 mb-0">{{ item.amount|number_format(0,'.',' ') }}
+                            <div class="h5 mb-0">{{ item.amount|number_format(0,'.',' ') }}{{ user.getCurrency.getSymbol }}
                                 <span class="badge badge-{{ badge_color }}" style="vertical-align: super">{{ item.type }}</span>
                             </div>
                             <div class="text-muted mt-2">{{ item.description }}</div>

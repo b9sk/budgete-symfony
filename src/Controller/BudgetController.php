@@ -23,13 +23,15 @@ class BudgetController extends AbstractController
         ]);
     }
     
-    public function recentItems($limit = 12)
+    public function today()
     {
-        $recent_items = $this->getDoctrine()->getRepository(Budget::class)
-            ->findBy(['user' => $this->getUser()->getId()], ['created' => 'DESC'], $limit);
+        $user = $this->getUser();
+        $today = $this->getDoctrine()->getRepository(Budget::class)->getTodayRecords($user->getId());
         
-        return $this->render('budget/_recent.html.twig', [
-            'recent' => $recent_items
+        return $this->render('budget/_day.html.twig', [
+            'recent' => $today,
+            'title' => 'Today',
+            'user' => $user,
         ]);
     }
     
