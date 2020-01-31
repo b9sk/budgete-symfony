@@ -32,7 +32,7 @@
         </div>
 
     {% else %}
-        <div class="mb-3">You have no records yet.</div>
+        <div class="mb-3">You have no records yet. Before you start <a class="font-weight-bold text-nowrap" href="{{ path('user') }}">set your currency.</a></div>
         <div><a href="{{ path('add_budget') }}" class="btn btn-success">Create a record</a></div>
     {% endif %}
 </section>
