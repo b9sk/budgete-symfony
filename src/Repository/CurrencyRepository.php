@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Currency;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Currency|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,12 @@ class CurrencyRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Currency::class);
+    }
+    
+    public function getAllOrderingByCode(): QueryBuilder
+    {
+        return $this->createQueryBuilder('c')
+            ->orderBy('c.code', 'ASC');
     }
 
     // /**

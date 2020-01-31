@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Currency;
 use App\Entity\User;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -25,7 +26,10 @@ class UserFormType extends AbstractType
 //            ])
             // @note: an important example how to implement an entity reference
             ->add('currency', EntityType::class, [
-                'class' => Currency::class
+                'class' => Currency::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->getAllOrderingByCode();
+                }
             ])
             ->add('submit', SubmitType::class)
         ;
