@@ -19,11 +19,6 @@ class UserFormType extends AbstractType
         $builder
             ->add('name')
             ->add('email')
-            // todo: implement changing password mechanism
-//            ->add('newPassword', PasswordType::class, [
-//                'mapped' => false,
-//                'required' => false,
-//            ])
             // @note: an important example how to implement an entity reference
             ->add('currency', EntityType::class, [
                 'class' => Currency::class,

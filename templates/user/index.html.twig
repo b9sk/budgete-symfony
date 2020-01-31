@@ -3,6 +3,14 @@
 {% block title %}Profile settings{% endblock %}
 
 {% block body %}
-    <h1 class="h3">Profile settings</h1>
-    {{ form(form) }}
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-8">
+            <h1 class="h3">Profile settings</h1>
+            {{ form(profile_form) }}
+        </div>
+        <div class="col-12 col-sm-6 col-md-4">
+            <h2 class="h3">Change password</h2>
+            {{ form(password_form) }}
+        </div>
+    </div>
 {% endblock %}
