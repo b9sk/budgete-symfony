@@ -29,11 +29,18 @@ class BudgetController extends AbstractController
         $user = $this->getUser();
         $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
         $today = $budgetRepo->getTodayRecords($user->getId());
+    
+        $incomeSum = $budgetRepo->getTodaySum($user->getId(), 'income')[0];
+        $expenseSum = $budgetRepo->getTodaySum($user->getId(), 'expense')[0];
         
         return $this->render('budget/_day.html.twig', [
             'recent' => $today,
             'title' => 'Today',
             'user' => $user,
+            'stats' => [
+                'income' => $incomeSum ?: 0,
+                'expense' => $expenseSum ?: 0,
+            ]
         ]);
     }
     

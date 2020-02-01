@@ -92,6 +92,24 @@ class BudgetRepository extends ServiceEntityRepository
             ;
     }
     
+    public function getTodaySum($userId, $type)
+    {
+        $date = new \DateTime('today midnight');
+        $today = $date->format('Y-m-d H:i:s');
+        
+        return $this->createQueryBuilder('b')
+            ->select('SUM(b.amount) as sum')
+            ->andWhere('b.created > :date')
+            ->setParameter('date', $today)
+            ->andWhere('b.type = :type')
+            ->setParameter('type', $type)
+            ->andWhere('b.user = :user')
+            ->setParameter('user', $userId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
     /**
      * @param $userId int
      * @param $type string income|expense
