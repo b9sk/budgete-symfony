@@ -30,6 +30,12 @@ class DateIntervalResolverService
     
     public function getLastMonth()
     {
+        $dateStart = new \DateTime('midnight');
+        $dateStart = $dateStart->format(self::FORMAT);
     
+        $dateEnd = new \DateTime('last month midnight');
+        $dateEnd = $dateEnd->format(self::FORMAT);
+    
+        return ['start' => $dateStart, 'end' => $dateEnd];
     }
 }

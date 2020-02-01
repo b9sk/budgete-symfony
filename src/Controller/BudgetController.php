@@ -99,6 +99,15 @@ class BudgetController extends AbstractController
         ]);
     }
     
+    public function lastMonth(DateIntervalResolverService $intervalResolver)
+    {
+        $user = $this->getUser();
+        dump($intervalResolver->getLastMonth());
+    
+        return $this->render('budget/_month.html.twig');
+        
+    }
+    
     /**
      * @Route("/dashboard/budget/add", name="add_budget")
      */

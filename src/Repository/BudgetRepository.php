@@ -96,8 +96,8 @@ class BudgetRepository extends ServiceEntityRepository
         ;
     
     }
-    public function getLastWeekExpenseSum() {
-        $interval = $this->dateResolver->getLastWeek();
+    public function getLastMonth($userId) {
+        $interval = $this->dateResolver->getLastMonth();
     
     }
 
