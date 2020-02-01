@@ -60,7 +60,7 @@ class BudgetRepository extends ServiceEntityRepository
             ->andWhere('b.user = :user')
             ->setParameter('user', $userId)
             ->groupBy('date', 'b.type')
-            ->orderBy('date', 'ASC')
+            ->orderBy('date', 'DESC')
             ->getQuery()
             ->getResult()
         ;
