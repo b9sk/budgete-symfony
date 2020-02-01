@@ -1,23 +1,42 @@
+{% if user.getCurrency is not null %}
+    {% set currency = user.getCurrency.getSymbol %}
+{% else %}
+    {% set currency = '' %}
+{% endif %}
+
 <section class="mb-2">
     <h2>{{ title }}</h2>
-    {{ dump(records) }}
     {% if records %}
-        {% for key, record in records %}
-            <div class="row">
-                <div class="col">
+        <div class="row">
+            {% for key, record in records %}
+                <div class="col col-sm-6 col-md-4 col-lg-3">
                     <article class="card mb-3">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            {#<div class="text-muted">{{ record[0].datetime.format('d.m D') }}</div>#}
-                            <div>
-
-                                tbd: income - expense
+                            <div class="text-muted">{{ record.datetime.format('d.m D') }}</div>
+                            <div class="mb-0">
+                                {% if record.diff_type == 'negative' %}
+                                    <span class="badge badge-danger">{{ record.diff|number_format(0, '.', ' ') }}{{ currency }}</span>
+                                {% elseif record.diff_type == 'positive' %}
+                                    <span class="badge badge-success">{{ record.diff|number_format(0, '.', ' ') }}{{ currency }}</span>
+                                {% elseif record.diff_type == 'neutral' %}
+                                    <span class="badge badge-secondary">{{ record.diff|number_format(0, '.', ' ') }}{{ currency }}</span>
+                                {% endif %}
                             </div>
                         </div>
-                        <div class="card-body">{{ dump(record) }}</div>
+                        <div class="card-body">
+                            {% for item in record.data %}
+                                {% if item.type == 'expense' %}
+                                    {% set badge = 'danger' %}
+                                {% elseif item.type == 'income' %}
+                                    {% set badge = 'success' %}
+                                {% endif %}
+                                <div class="h6 mb-0 badge badge-{{ badge }}">{{ item.sum|number_format(0, '.', ' ') }}{{ currency }}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </article>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     {% endif %}
-
 </section>
