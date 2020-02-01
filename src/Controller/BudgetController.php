@@ -42,11 +42,24 @@ class BudgetController extends AbstractController
         $user = $this->getUser();
         $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
         $lastWeek = $budgetRepo->getLastWeekRecords($user->getId());
+    
+        // db result post processing
+        $result = array();
+        foreach ($lastWeek as $item) {
+            
+            $result[$item['date']]['datetime'] = new \DateTime($item['date']);
+            
+            if (in_array('income', $item)) {
+                $result[$item['date']]['income'] = $item;
+            } elseif (in_array('expense', $item)) {
+                $result[$item['date']]['expense'] = $item;
+            }
+        }
         
-        dump($lastWeek);
+//        dump($result, true);
         // @todo: week template
         return $this->render('budget/_week.html.twig', [
-            'records' => $lastWeek,
+            'records' => $result,
             'title' => 'Last week',
             'user' => $user,
         ]);
