@@ -5,32 +5,24 @@
 {% endif %}
 
 <section class="mb-2">
-    <h2>{{ title }}</h2>
+    <h2>{{ title }}
+        <span class="badge badge-danger" style="vertical-align: super; font-size: 55%;">{{ stats.expense.sum ? stats.expense.sum|number_format(0, '.', ' ') : 0 }}{{ currency }}</span>
+        <span class="badge badge-success" style="vertical-align: super; font-size: 55%;">{{ stats.income.sum ? stats.income.sum|number_format(0, '.', ' ') : 0 }}{{ currency }}</span>
+    </h2>
     {% if records %}
         <div class="row">
             {% for key, record in records %}
-                <div class="col col-sm-6 col-md-4 col-lg-3">
-                    <article class="card mb-3">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div class="text-muted">{{ record.datetime.format('d.m D') }}</div>
-                            <div class="mb-0">
-                                {% if record.diff_type == 'negative' %}
-                                    <span class="badge badge-danger">{{ record.diff|number_format(0, '.', ' ') }}{{ currency }}</span>
-                                {% elseif record.diff_type == 'positive' %}
-                                    <span class="badge badge-success">{{ record.diff|number_format(0, '.', ' ') }}{{ currency }}</span>
-                                {% elseif record.diff_type == 'neutral' %}
-                                    <span class="badge badge-secondary">{{ record.diff|number_format(0, '.', ' ') }}{{ currency }}</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="card-body">
+                <div class="col col-sm-4 col-md-4 col-lg-3 col-xl-2">
+                    <article class="mb-3 pb-3 pt-3 d-flex justify-content-between align-items-start" style="border-bottom: 1px solid rgba(0,0,0,.125);">
+                        <small class="text-muted">{{ record.datetime.format('d.m D') }}</small>
+                        <div class="text-right" style="line-height: 1.2;">
                             {% for item in record.data %}
                                 {% if item.type == 'expense' %}
                                     {% set badge = 'danger' %}
                                 {% elseif item.type == 'income' %}
                                     {% set badge = 'success' %}
                                 {% endif %}
-                                <div class="h6 mb-0 badge badge-{{ badge }}">{{ item.sum|number_format(0, '.', ' ') }}{{ currency }}
+                                <div class="badge badge-{{ badge }}">{{ item.sum|number_format(0, '.', ' ') }}{{ currency }}
                                 </div>
                             {% endfor %}
                         </div>

@@ -66,7 +66,14 @@ class BudgetRepository extends ServiceEntityRepository
         ;
     }
     
-
+    
+    /**
+     * @param $userId int
+     * @param $type string income|expense
+     *
+     * @return array|null
+     * @throws \Exception
+     */
     public function getLastWeekSum($userId, $type) {
         $interval = $this->dateResolver->getLastWeek();
     

@@ -56,6 +56,7 @@ class BudgetController extends AbstractController
             $records[$item['date']]['data'][] = $item;
         }
     
+        // @todo: not needed any more. will be used in lastMonth controller
         // calc additional properties those required by template
         foreach ( $records as $date => &$record ) {
             // count difference and create two properties per record
@@ -87,7 +88,7 @@ class BudgetController extends AbstractController
             }
         }
         
-        return $this->render('budget/_week_compact.html.twig', [
+        return $this->render('budget/_week.html.twig', [
             'records' => $records,
             'title' => 'Last week',
             'user' => $user,
