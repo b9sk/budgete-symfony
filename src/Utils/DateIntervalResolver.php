@@ -6,10 +6,10 @@
  * Time: 16:24
  */
 
-namespace App\Service;
+namespace App\Utils;
 
 
-class DateIntervalResolverService
+class DateIntervalResolver
 {
     const FORMAT = 'Y-m-d H:i:s';
     

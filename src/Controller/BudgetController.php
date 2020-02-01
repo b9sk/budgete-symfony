@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Budget;
 use App\Form\BudgetFormType;
-use App\Service\DateIntervalResolverService;
+use App\Utils\DateIntervalResolver;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ class BudgetController extends AbstractController
         ]);
     }
     
-    public function today(DateIntervalResolverService $datetimeResolver)
+    public function today()
     {
         $user = $this->getUser();
         $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
@@ -55,9 +55,37 @@ class BudgetController extends AbstractController
             $records[$item['date']]['datetime'] = new \DateTime($item['date']);
             $records[$item['date']]['data'][] = $item;
         }
+
+        return $this->render('budget/_week.html.twig', [
+            'records' => $records,
+            'title' => 'Last week',
+            'user' => $user,
+            'stats' => [
+                'income' => $incomeSum ?: 0,
+                'expense' => $expenseSum ?: 0,
+            ]
+        ]);
+    }
     
-        // @todo: not needed any more. will be used in lastMonth controller
-        // calc additional properties those required by template
+    public function lastMonth(DateIntervalResolver $intervalResolver)
+    {
+        $user = $this->getUser();
+    
+        // aggregate required data from DB
+        $repository = $this->getDoctrine()->getRepository(Budget::class);
+        $recordsDbResult = $repository->getLastMonthRecords($user->getId());
+        $incomeSum = $repository->getLastMonthSum($user->getId(), 'income')[0];
+        $expenseSum = $repository->getLastMonthSum($user->getId(), 'expense')[0];
+    
+        //// DB response post processing
+        // resort the db response and add a \Datetime property
+        $records = array();
+        foreach ($recordsDbResult as $item) {
+            $records[$item['date']]['datetime'] = new \DateTime($item['date']);
+            $records[$item['date']]['data'][] = $item;
+        }
+    
+        // making additional properties those required by template
         foreach ( $records as $date => &$record ) {
             // count difference and create two properties per record
             $diff = null;
@@ -72,11 +100,11 @@ class BudgetController extends AbstractController
                     $diff = (int)$records[$date]['data'][0]['sum'];
                 }
             }
-            
+        
             // add diff property, define balance of the record
             if ($diff) {
                 $record['diff'] = $diff;
-    
+            
                 if ($diff < 0) {
                     $record['diff_type'] = 'negative';
                 } elseif ($diff > 0) {
@@ -87,25 +115,16 @@ class BudgetController extends AbstractController
                 }
             }
         }
-        
-        return $this->render('budget/_week.html.twig', [
+    
+        return $this->render('budget/_month.html.twig', [
             'records' => $records,
-            'title' => 'Last week',
+            'title' => 'Last month',
             'user' => $user,
             'stats' => [
                 'income' => $incomeSum ?: 0,
                 'expense' => $expenseSum ?: 0,
             ]
         ]);
-    }
-    
-    public function lastMonth(DateIntervalResolverService $intervalResolver)
-    {
-        $user = $this->getUser();
-        dump($intervalResolver->getLastMonth());
-    
-        return $this->render('budget/_month.html.twig');
-        
     }
     
     /**

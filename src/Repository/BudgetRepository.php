@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Budget;
-use App\Service\DateIntervalResolverService;
+use App\Utils\DateIntervalResolver;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -19,7 +19,7 @@ class BudgetRepository extends ServiceEntityRepository
     
     protected $dateResolver;
     
-    public function __construct(ManagerRegistry $registry, DateIntervalResolverService $dateResolver)
+    public function __construct(ManagerRegistry $registry, DateIntervalResolver $dateResolver)
     {
         parent::__construct($registry, Budget::class);
         $this->dateResolver = $dateResolver;
@@ -65,7 +65,32 @@ class BudgetRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    
+
+    // @todo: unite with the method above
+    public function getLastMonthRecords($userId)
+    {
+        // sum(amount), date(created)
+        $interval = $this->dateResolver->getLastMonth();
+        
+        // aggregation example
+        //SELECT sum(amount) as sum, DATE(created) as day
+        //FROM `budget`
+        //WHERE created > '2020-01-27 00:00:00' AND created < '2020-01-31 00:00:00'
+        //GROUP BY day
+        return $this->createQueryBuilder('b')
+            ->select('SUM(b.amount) as sum', 'DATE(b.created) as date', 'b.type')
+            ->andWhere('b.created < :start')
+            ->setParameter('start', $interval['start'])
+            ->andWhere('b.created > :end')
+            ->setParameter('end', $interval['end'])
+            ->andWhere('b.user = :user')
+            ->setParameter('user', $userId)
+            ->groupBy('date', 'b.type')
+            ->orderBy('date', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
     
     /**
      * @param $userId int
@@ -96,11 +121,32 @@ class BudgetRepository extends ServiceEntityRepository
         ;
     
     }
-    public function getLastMonth($userId) {
-        $interval = $this->dateResolver->getLastMonth();
     
+    // @todo: unite with the method above
+    public function getLastMonthSum($userId, $type) {
+        $interval = $this->dateResolver->getLastMonth();
+        
+        //SQL aggregation example
+        //SELECT sum(amount) as sum
+        //FROM `budget`
+        //WHERE created > '2020-01-24 00:00:00' AND created < '2020-01-31 00:00:00' AND type = 'expense'
+        return $this->createQueryBuilder('b')
+            ->select('SUM(b.amount) as sum')
+            ->andWhere('b.created < :start')
+            ->setParameter('start', $interval['start'])
+            ->andWhere('b.created > :end')
+            ->setParameter('end', $interval['end'])
+            ->andWhere('b.type = :type')
+            ->setParameter('type', $type)
+            ->andWhere('b.user = :user')
+            ->setParameter('user', $userId)
+            ->getQuery()
+            ->getResult()
+            ;
+        
     }
-
+    
+    
     // /**
     //  * @return Budget[] Returns an array of Budget objects
     //  */
