@@ -5,6 +5,9 @@
 
         {# a user control panel #}
         {% if user %}
+            {% if user.getCurrency is null %}
+                <a class="btn btn-outline-warning mr-3" href="{{ path('user') }}"><i class="fa fa-info-circle" aria-hidden="true"></i> <span class="d-none d-md-inline">Choose a currency</span></a>
+            {% endif %}
             <div class="dropdown mr-3">
                 <a href="#" class="dropdown-toggle text-light btn btn-secondary" class="dropdown-toggle" id="navUserDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="button">
                     <i class="fa fa-user" aria-hidden="true"></i>
