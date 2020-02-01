@@ -65,6 +65,34 @@ class BudgetRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    
+
+    public function getLastWeekSum($userId, $type) {
+        $interval = $this->dateResolver->getLastWeek();
+    
+        //SQL aggregation example
+        //SELECT sum(amount) as sum
+        //FROM `budget`
+        //WHERE created > '2020-01-24 00:00:00' AND created < '2020-01-31 00:00:00' AND type = 'expense'
+        return $this->createQueryBuilder('b')
+            ->select('SUM(b.amount) as sum')
+            ->andWhere('b.created < :start')
+            ->setParameter('start', $interval['start'])
+            ->andWhere('b.created > :end')
+            ->setParameter('end', $interval['end'])
+            ->andWhere('b.type = :type')
+            ->setParameter('type', $type)
+            ->andWhere('b.user = :user')
+            ->setParameter('user', $userId)
+            ->getQuery()
+            ->getResult()
+        ;
+    
+    }
+    public function getLastWeekExpenseSum() {
+        $interval = $this->dateResolver->getLastWeek();
+    
+    }
 
     // /**
     //  * @return Budget[] Returns an array of Budget objects

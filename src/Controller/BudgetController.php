@@ -40,12 +40,18 @@ class BudgetController extends AbstractController
     public function lastWeek()
     {
         $user = $this->getUser();
-        $dbResult = $this->getDoctrine()->getRepository(Budget::class)->getLastWeekRecords($user->getId());
+        
+        // aggregate required data from DB
+        $repository = $this->getDoctrine()->getRepository(Budget::class);
+        $recordsDbResult = $repository->getLastWeekRecords($user->getId());
+        $incomeSum = $repository->getLastWeekSum($user->getId(), 'income')[0];
+        $expenseSum = $repository->getLastWeekSum($user->getId(), 'expense')[0];
+        
     
         //// DB response post processing
         // resort the db response and add a \Datetime property
         $records = array();
-        foreach ($dbResult as $item) {
+        foreach ($recordsDbResult as $item) {
             $records[$item['date']]['datetime'] = new \DateTime($item['date']);
             $records[$item['date']]['data'][] = $item;
         }
@@ -81,12 +87,14 @@ class BudgetController extends AbstractController
             }
         }
         
-//        dump($records, true);
-        // @todo: week template
-        return $this->render('budget/_week.html.twig', [
+        return $this->render('budget/_week_compact.html.twig', [
             'records' => $records,
             'title' => 'Last week',
             'user' => $user,
+            'stats' => [
+                'income' => $incomeSum ?: 0,
+                'expense' => $expenseSum ?: 0,
+            ]
         ]);
     }
     

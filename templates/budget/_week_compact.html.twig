@@ -5,7 +5,10 @@
 {% endif %}
 
 <section class="mb-2">
-    <h2>{{ title }}</h2>
+    <h2>{{ title }}
+        <span class="badge badge-danger" style="vertical-align: super; font-size: 55%;">{{ stats.expense.sum ? stats.expense.sum|number_format(0, '.', ' ') : 0 }}{{ currency }}</span>
+        <span class="badge badge-success" style="vertical-align: super; font-size: 55%;">{{ stats.income.sum ? stats.income.sum|number_format(0, '.', ' ') : 0 }}{{ currency }}</span>
+    </h2>
     {% if records %}
         <div class="row">
             {% for key, record in records %}
