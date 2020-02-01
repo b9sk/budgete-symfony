@@ -40,26 +40,51 @@ class BudgetController extends AbstractController
     public function lastWeek()
     {
         $user = $this->getUser();
-        $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
-        $lastWeek = $budgetRepo->getLastWeekRecords($user->getId());
+        $dbResult = $this->getDoctrine()->getRepository(Budget::class)->getLastWeekRecords($user->getId());
     
-        // db result post processing
-        $result = array();
-        foreach ($lastWeek as $item) {
+        //// DB response post processing
+        // resort the db response and add a \Datetime property
+        $records = array();
+        foreach ($dbResult as $item) {
+            $records[$item['date']]['datetime'] = new \DateTime($item['date']);
+            $records[$item['date']]['data'][] = $item;
+        }
+    
+        // calc additional properties those required by template
+        foreach ( $records as $date => &$record ) {
+            // count difference and create two properties per record
+            $diff = null;
+            // if given data of the record has both income ane expense records
+            if (count($records[$date]['data']) > 1) {
+                $diff = (int)$records[$date]['data'][1]['sum'] - (int)$records[$date]['data'][0]['sum'];
+            }
+            else {
+                if ($records[$date]['data'][0]['type'] === 'expense') {
+                    $diff = 0 - (int)$records[$date]['data'][0]['sum'];
+                } elseif ($records[$date]['data'][0]['type'] === 'income') {
+                    $diff = (int)$records[$date]['data'][0]['sum'];
+                }
+            }
             
-            $result[$item['date']]['datetime'] = new \DateTime($item['date']);
-            
-            if (in_array('income', $item)) {
-                $result[$item['date']]['income'] = $item;
-            } elseif (in_array('expense', $item)) {
-                $result[$item['date']]['expense'] = $item;
+            // add diff property, define balance of the record
+            if ($diff) {
+                $record['diff'] = $diff;
+    
+                if ($diff < 0) {
+                    $record['diff_type'] = 'negative';
+                } elseif ($diff > 0) {
+                    $record['diff_type'] = 'positive';
+                }
+                else {
+                    $record['diff_type'] = 'neutral';
+                }
             }
         }
         
-//        dump($result, true);
+//        dump($records, true);
         // @todo: week template
         return $this->render('budget/_week.html.twig', [
-            'records' => $result,
+            'records' => $records,
             'title' => 'Last week',
             'user' => $user,
         ]);
