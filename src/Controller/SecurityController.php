@@ -162,7 +162,7 @@ class SecurityController extends AbstractController
                 $passwordEncoder->encodePassword($user, $password)
             );
             
-            // todo: remove the token from db
+            // remove the token from db
             $user->setRecoveryToken(null);
     
             $entityManager = $this->getDoctrine()->getManager();

@@ -14,10 +14,8 @@ class ResetPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email'
-                , null
-                //, EmailType::class // todo: enable it when controller side job gets done
-                , [
+            ->add('email',
+                EmailType::class, [
                     'mapped' => false
                 ]
             )
