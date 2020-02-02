@@ -49,7 +49,7 @@ class SecurityController extends AbstractController
      */
     public function resetPassword(Request $request, MailerInterface $mailer): Response
     {
-        if ($this->getUser()) {
+        if ( $this->getUser() ) {
             return $this->redirectToRoute('dashboard');
         }
         
@@ -57,21 +57,21 @@ class SecurityController extends AbstractController
         $form = $this->createForm(ResetPasswordType::class, $user);
         $form->handleRequest($request);
         
-        $isError = false;
-        if ($form->isSubmitted() && $form->isValid()) {
+        $isError = FALSE;
+        if ( $form->isSubmitted() && $form->isValid() ) {
             $email = $form->get('email')->getData();
             $repository = $this->getDoctrine()->getRepository(User::class);
             $dbUser = $repository->findOneBy(['email' => $email]);
             
             // if given email is not found in User entity items
-            if (!$dbUser) {
+            if ( !$dbUser ) {
                 // do nothing but error message
                 $this->addFlash(
                     'danger',
                     'A user with this email is not found.'
                 );
                 // and suggestion to register instead
-                $isError = true;
+                $isError = TRUE;
             }
             else {
                 // generate a recovery password token for the user
@@ -80,12 +80,12 @@ class SecurityController extends AbstractController
                 
                 // compose an url with the token
                 $tokenLink = $this->generateUrl('login_new_password', ['recovery_token' => $token], 0);
-    
+                
                 // put the token to db
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($dbUser);
                 $em->flush();
-    
+                
                 // compose an email message
                 $email = ( new Email() )
                     ->from('budgete@b9sk.ru')
@@ -96,19 +96,19 @@ class SecurityController extends AbstractController
                 
                 // send the message
                 $mailer->send($email);
-    
+                
                 // redirect the user to /login/reset/done
                 return $this->redirectToRoute('reset_passwd_success');
-    
+                
             }
         }
         
         return $this->render('security/reset_passwd.html.twig', [
             'form' => $form->createView(),
             'title' => 'Reset your password',
-            'is_error' => $isError
+            'is_error' => $isError,
         ]);
-    
+        
     }
     
     /**
@@ -127,16 +127,22 @@ class SecurityController extends AbstractController
     public function newPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $token = $request->get('recovery_token');
-    
+        
+        $errorRender = $this->render('security/error.html.twig');
+        
+        // check if token passed
+        if ( !$token ) {
+            return $errorRender;
+        }
+        
         // find a user by given token in db
         $repo = $this->getDoctrine()->getRepository(User::class);
         $user = $repo->findOneBy(['recoveryToken' => $token]);
-
-        $isTokenFound = true;
-        if (!$user) {
-            $isTokenFound = false;
+        
+        if ( !$user ) {
+            return $errorRender;
         }
-    
+        
         // render a form for new password
         $form = $this->createFormBuilder()
             ->add('newPassword', PasswordType::class, [
@@ -146,7 +152,7 @@ class SecurityController extends AbstractController
                         'min' => 6,
                         'max' => 128,
                     ]),
-                ]
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Set new password',
@@ -154,17 +160,17 @@ class SecurityController extends AbstractController
             ->getForm();
         
         $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        
+        if ( $form->isSubmitted() && $form->isValid() ) {
             $password = $form->get('newPassword')->getData();
-    
+            
             $user->setPassword(
                 $passwordEncoder->encodePassword($user, $password)
             );
             
             // remove the token from db
-            $user->setRecoveryToken(null);
-    
+            $user->setRecoveryToken(NULL);
+            
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -176,7 +182,6 @@ class SecurityController extends AbstractController
         
         return $this->render('security/new_password.html.twig', [
             'title' => 'Type a new password',
-            'is_token_found' => $isTokenFound,
             'form' => $form->createView(),
         ]);
     }
