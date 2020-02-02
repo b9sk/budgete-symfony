@@ -11,5 +11,6 @@
         {{ form_row(registrationForm.agreeTerms) }}
 
         <button class="btn">Register</button>
+        <p class="mt-3">Registred already? <a class="font-weight-bold" href="{{ path('app_login') }}">Login</a></p>
     {{ form_end(registrationForm) }}
 {% endblock %}
