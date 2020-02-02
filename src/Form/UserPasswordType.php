@@ -11,6 +11,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * Class UserPasswordType
+ *
+ * Change password form on User Profile Settings Page
+ *
+ * @package App\Form
+ */
 class UserPasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)

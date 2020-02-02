@@ -13,6 +13,8 @@ class UserController extends AbstractController
 {
     
     /**
+     * User Profile Settings Page
+     *
      * @Route("/user", name="user")
      */
     public function index(Request $request, UserPasswordEncoderInterface $passwordEncoder)
