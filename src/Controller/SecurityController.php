@@ -60,10 +60,8 @@ class SecurityController extends AbstractController
         $isError = false;
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->get('email')->getData();
-            dump($email);
             $repository = $this->getDoctrine()->getRepository(User::class);
             $dbUser = $repository->findOneBy(['email' => $email]);
-            dump($dbUser);
             
             // if given email is not found in User entity items
             if (!$dbUser) {
@@ -78,7 +76,6 @@ class SecurityController extends AbstractController
             else {
                 // generate a recovery password token for the user
                 $token = md5(random_bytes(10));
-                dump($token);
                 $dbUser->setRecoveryToken($token);
                 
                 // compose an url with the token
@@ -130,7 +127,6 @@ class SecurityController extends AbstractController
     public function newPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $token = $request->get('recovery_token');
-        dump($token);
     
         // find a user by given token in db
         $repo = $this->getDoctrine()->getRepository(User::class);
