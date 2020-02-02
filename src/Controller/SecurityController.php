@@ -89,7 +89,7 @@ class SecurityController extends AbstractController
                 // compose an email message
                 $email = ( new Email() )
                     ->from('budgete@b9sk.ru')
-                    ->to('i@b9sk.ru')
+                    ->to($email)
                     ->subject('Password recovery')
                     // @todo: use a twig template
                     ->text('Click the link for recovery your password: ' . $tokenLink);
