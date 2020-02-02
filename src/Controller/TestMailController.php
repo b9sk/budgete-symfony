@@ -19,10 +19,6 @@ class TestMailController extends AbstractController
         $email = ( new Email() )
             ->from('budgete@b9sk.ru')
             ->to('i@b9sk.ru')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
             ->subject('Time for Symfony Mailer!')
             ->text('Sending emails is fun again!')
             ->html('<p>See Twig integration for better HTML integration!</p>');

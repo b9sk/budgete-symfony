@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,12 +14,14 @@ class ResetPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
+            ->add('email'
+                , null
+                //, EmailType::class // todo: enable it when controller side job gets done
+                , [
+                    'mapped' => false
+                ]
+            )
             ->add('submit', SubmitType::class)
-//            ->add('roles')
-//            ->add('password')
-//            ->add('name')
-//            ->add('currency')
         ;
     }
 

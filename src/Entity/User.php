@@ -47,6 +47,11 @@ class User implements UserInterface
      */
     private $currency;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $recoveryToken;
+
     public function __construct()
     {
         $this->budgets = new ArrayCollection();
@@ -158,6 +163,18 @@ class User implements UserInterface
     public function setCurrency(?Currency $currency): self
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    public function getRecoveryToken(): ?string
+    {
+        return $this->recoveryToken;
+    }
+
+    public function setRecoveryToken(?string $recoveryToken): self
+    {
+        $this->recoveryToken = $recoveryToken;
 
         return $this;
     }
