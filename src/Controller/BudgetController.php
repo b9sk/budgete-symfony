@@ -171,6 +171,7 @@ class BudgetController extends AbstractController
             'form' => $form->createView(),
             'user' => $this->getUser(),
             'title' => 'Add expense or income',
+            'currency' => $this->getUser()->getCurrency(),
         ]);
     }
     
@@ -213,6 +214,7 @@ class BudgetController extends AbstractController
             'user' => $this->getUser(),
             'title' => 'Edit a record',
             'budget' => $budget_item,
+            'currency' => $this->getUser()->getCurrency(),
         ]);
     
     }

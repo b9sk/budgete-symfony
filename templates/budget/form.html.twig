@@ -4,7 +4,28 @@
 {% block title %}{{ title }}{{ datetime }}{% endblock %}
 {% block body %}
     <h1 class="h3 text-muted">{{ title }}{{ datetime }}</h1>
-    {{ form(form) }}
+    {#{{ form(form) }}#}
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.amount) }}
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        {{ currency.symbol }}
+                    </div>
+                </div>
+                {{ form_widget(form.amount) }}
+                <div class="input-group-append js_budget-type_btn-wrapper">
+                    <button class="js_budget-type_btn btn btn-outline-dark" type="button" data-type="expense">Expense</button>
+                    <button class="js_budget-type_btn btn btn-outline-dark" type="button" data-type="income">Income</button>
+                </div>
+            </div>
+        </div>
+        {{ form_widget(form.type, { 'attr' : { class : 'js_budget-type d-none' } }) }}
+    {{ form_end(form) }}
+
+
 
     {# delete action #}
     {% if budget is defined %}
@@ -15,4 +36,11 @@
         </div>
     {% endif %}
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {# handling form.type pseodo radio buttons #}
+    <script src="{{ asset('/assets/js/budget-form.js') }}"></script>
 {% endblock %}
