@@ -66,7 +66,7 @@ class AppFixtures extends Fixture
 
     public function loadDemoData(ObjectManager $manager)
     {
-        // @todo: set todays records
+        // set todays records
         foreach ([1,2,3,4,5,6,7,8,9,10] as $time) {
             $record = new Budget();
             $record
@@ -79,7 +79,7 @@ class AppFixtures extends Fixture
             $manager->persist($record);
         }
 
-        // @todo: set records from last three months
+        // set records from last three months
         foreach (range(1,99) as $day) {
             $i = 0;
             if ($i < 5) {

@@ -212,6 +212,7 @@ class BudgetController extends AbstractController
             'form' => $form->createView(),
             'user' => $this->getUser(),
             'title' => 'Edit a record',
+            'budget' => $budget_item,
         ]);
     
     }

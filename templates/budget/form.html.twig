@@ -1,7 +1,18 @@
 {% extends 'base.html.twig' %}
-{% block title %}{{ title }}{% endblock %}
+{% set datetime = budget is defined ? ' ' ~ budget.created|date('H:s d M') : '' %}
 
+{% block title %}{{ title }}{{ datetime }}{% endblock %}
 {% block body %}
-    <h1 class="h3 text-muted">{{ title }}</h1>
+    <h1 class="h3 text-muted">{{ title }}{{ datetime }}</h1>
     {{ form(form) }}
+
+    {# delete action #}
+    {% if budget is defined %}
+        <div class="row col">
+            <form action="{{ path('remove_budget', { id : budget.id }) }}">
+                <button class="btn" onclick="return confirm('Are you sure you want to delete this item?');" type="submit">Delete</button>
+            </form>
+        </div>
+    {% endif %}
+
 {% endblock %}
