@@ -3,9 +3,15 @@
 {% block title %}Budgete of {{ user.name ?: user.email }}{% endblock %}
 
 {% block body %}
-
-    {{ render(controller('App\\Controller\\BudgetController::today')) }}
-    {{ render(controller('App\\Controller\\BudgetController::lastWeek')) }}
-    {{ render(controller('App\\Controller\\BudgetController::lastMonth')) }}
-
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-7">
+            {{ render(controller('App\\Controller\\BudgetController::day', { date: date })) }}
+        </div>
+        <div class="col-12 col-sm-6 col-md-5 col-lg-4 offset-lg-1">
+            {{ render(controller('App\\Controller\\BudgetController::lastWeek', { date: date })) }}
+        </div>
+        <div class="col-12">
+            {{ render(controller('App\\Controller\\BudgetController::lastMonth')) }}
+        </div>
+    </div>
 {% endblock %}

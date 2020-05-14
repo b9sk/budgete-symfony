@@ -12,30 +12,35 @@ use Symfony\Component\HttpFoundation\Request;
 class BudgetController extends AbstractController
 {
     /**
-     * @Route("/dashboard/budget", name="budget")
+     * Returns all records of given date OR today if nothing is given
      */
-    public function index()
+    public function day($date)
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
-    
-        return $this->render('budget/index.html.twig', [
-            'controller_name' => 'BudgetController',
-            'user' => $this->getUser(),
-        ]);
-    }
-    
-    public function today()
-    {
+
         $user = $this->getUser();
-        $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
-        $today = $budgetRepo->getTodayRecords($user->getId());
-    
-        $incomeSum = $budgetRepo->getTodaySum($user->getId(), 'income')[0];
-        $expenseSum = $budgetRepo->getTodaySum($user->getId(), 'expense')[0];
-        
+        if (!$date) {
+            $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
+            $day = $budgetRepo->getRecordsOfDayByRange($user);
+
+            $incomeSum = $budgetRepo->getSumOfDay($user, 'income');
+            $expenseSum = $budgetRepo->getSumOfDay($user, 'expense');
+        } else {
+            $budgetRepo = $this->getDoctrine()->getRepository(Budget::class);
+
+            $dateStart = new \DateTimeImmutable($date);
+            $dateEnd = $dateStart->modify('+1 day');
+
+            $day = $budgetRepo->getRecordsOfDayByRange($user, $dateStart, $dateEnd);
+            $incomeSum = $budgetRepo->getSumOfDay($user, 'income', $dateStart, $dateEnd);
+            $expenseSum = $budgetRepo->getSumOfDay($user, 'expense', $dateStart, $dateEnd);
+        }
+
+        $date = (new \DateTime($date))->format('d.m l');
+
         return $this->render('budget/_day.html.twig', [
-            'recent' => $today,
-            'title' => 'Today',
+            'recent' => $day,
+            'title' => $date ?: 'Today',
             'user' => $user,
             'stats' => [
                 'income' => $incomeSum ?: 0,
@@ -43,8 +48,8 @@ class BudgetController extends AbstractController
             ]
         ]);
     }
-    
-    public function lastWeek()
+
+    public function lastWeek($date)
     {
         $user = $this->getUser();
         
@@ -70,7 +75,8 @@ class BudgetController extends AbstractController
             'stats' => [
                 'income' => $incomeSum ?: 0,
                 'expense' => $expenseSum ?: 0,
-            ]
+            ],
+            'date' => $date,
         ]);
     }
     
@@ -135,7 +141,7 @@ class BudgetController extends AbstractController
     }
     
     /**
-     * @Route("/dashboard/budget/add", name="add_budget")
+     * @Route("/budget/add", name="add_budget")
      */
     public function add(Request $request)
     {
@@ -176,7 +182,7 @@ class BudgetController extends AbstractController
     }
     
     /**
-     * @Route("/dashboard/budget/edit/{id}", name="edit_budget")
+     * @Route("/budget/edit/{id}", name="edit_budget")
      */
     public function budgetById($id, Request $request)
     {
@@ -220,7 +226,7 @@ class BudgetController extends AbstractController
     }
     
     /**
-     * @Route("/dashboard/budget/remove/{id}", name="remove_budget")
+     * @Route("/budget/remove/{id}", name="remove_budget")
      */
     public function removeBudgetItem($id)
     {

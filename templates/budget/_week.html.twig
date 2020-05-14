@@ -9,7 +9,41 @@
         <span class="badge badge-danger" style="vertical-align: super; font-size: 55%;">{{ stats.expense.sum ? stats.expense.sum|number_format(0, '.', ' ') : 0 }}{{ currency }}</span>
         <span class="badge badge-success" style="vertical-align: super; font-size: 55%;">{{ stats.income.sum ? stats.income.sum|number_format(0, '.', ' ') : 0 }}{{ currency }}</span>
     </h3>
+    <div class="lead">Click a day to see its details</div>
+
     {% if records %}
+        <div class="row">
+            <div class="col my-3">
+                <ul class="list-group">
+                    {% for key, record in records %}
+                        <a class="list-group-item d-flex justify-content-between
+                            {{ date == record.datetime|date('Y-m-d') ? ' active' }}
+                            {{ date is null and loop.first ? ' active' }}"
+                           href="{{ path('dashboard', {date : record.datetime|date('Y-m-d')}) }}"
+                        >
+                            <div>
+                                <div class="">{{ loop.first ? 'Today' : record.datetime.format('d.m D') }}</div>
+                            </div>
+                            <div>
+                                {% for item in record.data %}
+                                    {% if item.type == 'expense' %}
+                                        {% set badge = 'danger' %}
+                                    {% elseif item.type == 'income' %}
+                                        {% set badge = 'success' %}
+                                    {% endif %}
+                                    <div class="badge badge-{{ badge }}">{{ item.sum|number_format(0, '.', ' ') }}{{ currency }}</div>
+                                {% endfor %}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% else %}
+        <div>Start to log your money flow. Data will be here tomorrow.</div>
+    {% endif %}
+
+{#    {% if records %}
         <div class="row">
             {% for key, record in records %}
                 <div class="col col-sm-4 col-md-4 col-lg-3 col-xl-2">
@@ -32,5 +66,5 @@
         </div>
     {% else %}
         <div>Start log your money flow. Data will be here tomorrow.</div>
-    {% endif %}
+    {% endif %}#}
 </section>

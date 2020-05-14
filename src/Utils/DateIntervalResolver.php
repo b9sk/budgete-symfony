@@ -19,10 +19,10 @@ class DateIntervalResolver
      */
     public function getLastWeek()
     {
-        $dateStart = new \DateTime('midnight');
+        $dateStart = new \DateTime('now');
         $dateStart = $dateStart->format(self::FORMAT);
 
-        $dateEnd = new \DateTime('-7 days midnight');
+        $dateEnd = new \DateTime('-6 days midnight');
         $dateEnd = $dateEnd->format(self::FORMAT);
         
         return ['start' => $dateStart, 'end' => $dateEnd];

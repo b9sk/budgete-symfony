@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Budget;
+use App\Entity\User;
 use App\Utils\DateIntervalResolver;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 
@@ -25,20 +27,41 @@ class BudgetRepository extends ServiceEntityRepository
         $this->dateResolver = $dateResolver;
     }
     
-    public function getTodayRecords($userId)
+    /**
+     * Returns Budgete instances by date range.
+     * If no non-required arguments given then returns records for today.
+     * If $start only given then returns all records from given datetime till now.
+     * If $start and $end given then returns all records between the range.
+     * If $start is null but $end is given then returns empty array
+     *
+     * @param $user
+     * @param \DateTimeInterface|NULL $start
+     * @param \DateTimeInterface|NULL $end
+     *
+     * @return Budget[]|ArrayCollection
+     * @throws \Exception
+     */
+    public function getRecordsOfDayByRange(User $user, \DateTimeInterface $start = null, \DateTimeInterface $end = null)
     {
-        $date = new \DateTime('today midnight');
-        $today = $date->format('Y-m-d H:i:s');
-        
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.created > :date')
-            ->setParameter('date', $today)
-            ->andWhere('b.user = :user')
-            ->setParameter('user', $userId)
-            ->orderBy('b.created', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('b');
+
+        if (!$start) {
+            $start = (new \DateTime('today midnight'))->format('Y-m-d H:i:s');
+        }
+
+        $qb->andWhere('b.created > :start')
+            ->setParameter('start', $start);
+
+        if ($end) {
+            $qb->andWhere('b.created < :end')
+                ->setParameter('end', $end);
+        }
+
+        $qb->andWhere('b.user = :user')
+        ->setParameter('user', $user)
+        ->orderBy('b.created', 'DESC');
+
+        return new ArrayCollection( $qb->getQuery()->getResult() );
     }
     
     public function getLastWeekRecords($userId)
@@ -92,22 +115,31 @@ class BudgetRepository extends ServiceEntityRepository
             ;
     }
     
-    public function getTodaySum($userId, $type)
+    public function getSumOfDay(User $user, string $type, \DateTimeInterface $start = null, \DateTimeInterface $end = null)
     {
-        $date = new \DateTime('today midnight');
-        $today = $date->format('Y-m-d H:i:s');
-        
-        return $this->createQueryBuilder('b')
-            ->select('SUM(b.amount) as sum')
-            ->andWhere('b.created > :date')
-            ->setParameter('date', $today)
-            ->andWhere('b.type = :type')
+        $qb = $this->createQueryBuilder('b')
+            ->select('SUM(b.amount) as sum');
+
+        if (!$start) {
+            $start = (new \DateTime('today midnight'))->format('Y-m-d H:i:s');
+        }
+
+        $qb->andWhere('b.created > :start')
+            ->setParameter('start', $start);
+
+
+        if ($end) {
+            $qb->andWhere('b.created < :end')
+                ->setParameter('end', $end);
+        }
+
+        $qb->andWhere('b.type = :type')
             ->setParameter('type', $type)
             ->andWhere('b.user = :user')
-            ->setParameter('user', $userId)
-            ->getQuery()
-            ->getResult()
+            ->setParameter('user', $user)
         ;
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
     
     /**

@@ -10,21 +10,21 @@
         <span class="badge badge-danger" style="vertical-align: super; font-size: 55%;">{{ stats.expense.sum ? stats.expense.sum|number_format(0, '.', ' ') : 0 }}{{ currency }}</span>
         <span class="badge badge-success" style="vertical-align: super; font-size: 55%;">{{ stats.income.sum ? stats.income.sum|number_format(0, '.', ' ') : 0 }}{{ currency }}</span>
     </h3>
+    <div class="lead">Click a record to see its details</div>
 
     {#{{ dump(recent) }}#}
     {% if recent %}
         <div class="row">
-            <div class="col mb-3">
+            <div class="col my-3">
                 <ul class="list-group">
                     {% for item in recent %}
-                        <a class="list-group-item d-flex justify-content-between {{ loop.first ? 'active' }}" href="{{ path('edit_budget', { id: item.getId }) }}">
+                        <a class="list-group-item d-flex justify-content-between" href="{{ path('edit_budget', { id: item.getId }) }}">
                             <div>
                                 <div>{{ item.created.format('H:i') }}</div>
-                                <div>{{ item.description }}</div>
+                                <div class="text-body">{{ item.description }}</div>
                             </div>
                             <div>
                                 <span class="badge badge-pill badge-{{ item.type == 'expense' ? 'danger' : 'success' }}">
-                                    {#{{ item.amount|number_format(0,'.',' ') }}{% if user.getCurrency is not null %}{{ user.getCurrency.getSymbol }}{% endif %}#}
                                     {{ item.amount|number_format(0,'.',' ') }}{{ user.getCurrency is not null ? user.getCurrency.getSymbol }}
                                 </span>
                             </div>
