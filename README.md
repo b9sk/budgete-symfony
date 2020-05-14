@@ -3,8 +3,8 @@ Dockerizer: https://github.com/b9sk/budgete-docker
 
 ### TDB
 * Deploy Bundle
-* Fixtures
-* Details of a day
+* ~~Fixtures~~
+* ~~Details of a day~~
 * Localization
 
 ### TBD after TBD for Users
