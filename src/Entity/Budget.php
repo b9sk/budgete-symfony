@@ -66,7 +66,7 @@ class Budget
 
     public function setAmount(int $amount): self
     {
-        $this->amount = $amount;
+        $this->amount = abs( $amount );
 
         return $this;
     }
