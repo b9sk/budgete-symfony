@@ -17,7 +17,7 @@ class DashboardController extends AbstractController
     public function index($date): Response
     {
         $today = (new \DateTime())->format('Y-m-d');
-        dump($today, $date);
+//        dump($today, $date);
         $date = $today === $date ? null : $date;
         $this->denyAccessUnlessGranted('ROLE_USER');
     
