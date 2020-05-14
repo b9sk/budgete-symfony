@@ -3,8 +3,17 @@
 {% block title %}Budgete{% endblock %}
 
 {% block body %}
-    <h1>Welcome to Budgete!</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem fugit neque quaerat repellat totam, ut voluptas voluptate. Adipisci autem doloribus exercitationem iusto maiores omnis, qui quis, quisquam similique tempora voluptates!</p>
-    <div><a class="btn btn-primary btn-lg" href="{{ path('app_login') }}">Login</a>
-    <a class="btn btn-success btn-lg" href="{{ path('app_register') }}">Register</a></div>
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Welcome to Budgete!</h1>
+            <p class="lead">Help yourself to track your expenses.</p>
+            <hr class="my-4">
+            <div class="my-3">
+                <a class="btn btn-primary btn-lg" href="{{ path('app_login') }}">Login</a>
+                <a class="btn btn-success btn-lg" href="{{ path('app_register') }}">Register</a>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
