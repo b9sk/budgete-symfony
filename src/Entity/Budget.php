@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\BudgetRepository")
  */
@@ -24,6 +24,7 @@ class Budget
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\LessThan(2147483648)
      */
     private $amount;
 
