@@ -20,6 +20,7 @@
             {% if app.environment is same as("dev") %}
                 <ul class="bg-dark text-white">
                     You are using a development environment. Probably you need to load a demo data first.
+                    <li>create schema: <code>php bin/console doctrine:migrations:migrate</code></li>
                     <li>load fixtures: <code>php bin/console doctrine:fixtures:load</code></li>
                     <li>login as <code>test@test.test:123456</code></li>
                 </ul>
