@@ -1,10 +1,28 @@
-Source code of http://budgete.b9sk.ru  
-Dockerizer: https://github.com/b9sk/budgete-docker
+Hi! In this repository I showcase my knowledge of a web application development.
 
-### TDB
-* Deploy Bundle
+In the repository and its relatives I'm using:
+* PHP (because it's popular) as a backend
+* typescript (because i ❤️ it) as a frontend
+* docker-compose for an easier self-hosted deployment
+* redis, nginx, etc as the docker services
+
+## Notes
+
+Parent repository with docker: https://github.com/b9sk/budgete-docker
+
+### TDB 2022
+#### System Design
+* API Backend
+* Redis
+* Nextjs Frontend
+
+#### Features
+* Details of a day
+
+## 2020 (Deprecated?)
+### TDB 
+* Deploy Bundle (Huh?)
 * ~~Fixtures~~
-* ~~Details of a day~~
 * Localization
 
 ### TBD after TBD for Users
