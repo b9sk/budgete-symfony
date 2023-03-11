@@ -11,6 +11,8 @@ In the repository and its relatives I'm using:
 Parent repository with docker: https://github.com/b9sk/budgete-docker
 
 ### TDB 2022
+* Update the repo's Symfony (and PHP?)
+
 #### System Design
 * API Backend
 * Redis
